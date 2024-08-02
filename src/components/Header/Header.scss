@@ -1,0 +1,98 @@
+@import "../../styles/main.scss";
+
+.header {
+    width: 98.44vw;
+    // height: 3.37vh;
+    height: 2.9vh;
+    // min-height: 25px;
+    min-height: 20px;
+    padding: 0 0.78125vw;
+    background-color: $background-dark;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #525252;
+    -webkit-app-region: drag;
+
+    .header_buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 0.78125vw;
+        -webkit-app-region: no-drag;
+
+        input {
+            display: none;
+        }
+
+        button {
+            width: fit-content;
+            background-color: transparent;
+            padding: 0 0.36vw;
+            border: none;
+            border-radius: 1px;
+            // height: 2.85vh;
+            height: 2.3vh;
+            // font-size: 1.2vw;
+            font-size: 1.09375vw;
+            font-weight: 300;
+            color: $header-font-dark;
+            transition: background-color 0.2s;
+
+            &:hover {
+                transition: background-color 0.2s;
+                background-color: $button-hover;
+            }
+        }
+    }
+
+    .header_run_search {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5vw;
+        -webkit-app-region: no-drag;
+
+        button {
+            width: fit-content;
+            height: fit-content;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+
+            svg {
+                // width: 1.5625vw;
+                // height: 1.5625vw;
+                width: 1.35vw;
+                height: 1.35vw;
+                min-width: 14px;
+                min-height: 14px;
+                -webkit-app-region: no-drag;
+            }
+        }
+    }
+
+    input {
+        // width: 30.75vw;
+        width: 30.25vw;
+        min-width: 300px;
+        // height: 2.45vh;
+        height: 2.1vh;
+        min-height: 16px;
+        // padding-left: 0.5vw;
+        padding: 0 0.5vw;
+        background-color: $codespace-dark;
+        border: 1px solid $border-dark;
+        border-radius: 0.15625vw;
+        color: $header-font-dark;
+        // font-size: 1vw;
+        font-size: 0.9vw;
+        font-weight: 300;
+        -webkit-app-region: no-drag;
+
+        &::placeholder {
+            color: #606060;
+            text-align: center;
+        }
+    }
+}

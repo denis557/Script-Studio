@@ -1,0 +1,46 @@
+@import '../../styles/main.scss';
+
+.sidebar {
+    width: 13.5vw;
+    min-width: 13.5vw;
+    height: 100%;
+    background-color: $background-dark;
+    border-right: 1px solid $border-dark;
+
+    h1 {
+        font-size: 1.35vw;
+        font-weight: 500;
+        color: $header-font-dark;
+        margin: 1.44vh 0 1.44vh 1vw;
+    }
+
+    button {
+        width: 100%;
+        padding: 0 7.7%;
+        height: 2.9vh;
+        background-color: transparent;
+        border: none;
+        margin-bottom: 1px;
+        color: $header-font-dark;
+        font-size: 1.04vw;
+        font-weight: 300;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.78125vw;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:hover {
+            background-color: #222222;
+        }
+
+        div {
+            width: 1.45vw;
+            height: 1.45vw;
+            color: $header-font-dark;
+            font-size: 1.14vw;
+            font-weight: 600;
+        }
+    }
+}
