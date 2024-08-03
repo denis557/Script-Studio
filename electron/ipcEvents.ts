@@ -1,4 +1,5 @@
 import { ipcMain, BrowserWindow } from "electron";
+import { exec } from 'child_process'
 
 const events = (win: BrowserWindow) => {
     ipcMain.handle('windowAction', (event, ...args) => {
@@ -18,6 +19,24 @@ const events = (win: BrowserWindow) => {
 
             return 'maximized'
         }
+    })
+
+    ipcMain.handle('runCode', (event, ...args) => {
+        const path = args[0];
+
+        exec(`D:/JS/ScriptStudio/SimpleLang/Simple.exe "${path}"`, (err, stdout, stderr) => {
+            if(err) {
+                console.log(err);
+                return
+            }
+
+            if(stderr) {
+                console.log(stderr);
+                return
+            }
+
+            console.log(stdout);
+        })
     })
 }
 
