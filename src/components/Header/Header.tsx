@@ -2,12 +2,17 @@ import './Header.scss'
 import Controls from '../Controls/Controls';
 import { Run } from '../../assets/header/Run';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedFile } from '../Codespace/selectedFileSlice';
+import { editOriginalText, setSelectedFile } from '../Codespace/selectedFileSlice';
 import { useRef } from 'react';
-import { setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
+import { saveChanges, setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
 import { ipcRenderer } from 'electron';
 import { RootState } from '../../app/store';
 const fs = require('fs')
+
+interface FileInterface {
+    path: string;
+    text: string;
+}
 
 function Header() {
     const dispatch = useDispatch();
@@ -26,10 +31,23 @@ function Header() {
         });
     }
 
+    const updateFile = (file: FileInterface) => {
+        fs.writeFile(file.path, file.text, (err: string) => {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log('updated');
+              dispatch(editOriginalText(file.text));
+              dispatch(saveChanges({ text: file.text, path: file.path }))
+            }
+        });
+    }
+
     const handleRun = async () => {
         if (!selectedFile.path) {
             console.log('Выбери файл гад')
         } else if (selectedFile.name.split('.')[1] == 'txt' || selectedFile.name.split('.')[1] == 'simple') {
+            if(selectedFile.originalText !== selectedFile.text) updateFile({ path: selectedFile.path, text: selectedFile.text })
             await ipcRenderer.invoke('runCode', selectedFile.path);
         } else {
             console.log('Неправильный формат гад')

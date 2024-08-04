@@ -24,7 +24,8 @@ const events = (win: BrowserWindow) => {
     ipcMain.handle('runCode', (event, ...args) => {
         const path = args[0];
 
-        exec(`D:/JS/ScriptStudio/SimpleLang/Simple.exe "${path}"`, (err, stdout, stderr) => {
+        // exec(`D:/JS/ScriptStudio/SimpleLang/Simple.exe "${path}"`, (err, stdout, stderr) => {
+        exec(`Simple "${path}"`, (err, stdout, stderr) => {
             if(err) {
                 console.log(err);
                 return
