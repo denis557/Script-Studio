@@ -21,24 +21,43 @@ const events = (win: BrowserWindow) => {
         }
     })
 
-    ipcMain.handle('runCode', (event, ...args) => {
+    // ipcMain.handle('runCode', (event, ...args) => {
+    //     const path = args[0];
+
+    //     exec(`Simple "${path}"`, (err, stdout, stderr) => {
+    //         if(err) {
+    //             console.log(err);
+    //             return
+    //         }
+
+    //         if(stderr) {
+    //             console.log(stderr);
+    //             return
+    //         }
+
+    //         console.log(stdout);
+    //     })
+    // })
+    ipcMain.handle('runCode', async (event, ...args) => {
         const path = args[0];
-
-        // exec(`D:/JS/ScriptStudio/SimpleLang/Simple.exe "${path}"`, (err, stdout, stderr) => {
-        exec(`Simple "${path}"`, (err, stdout, stderr) => {
-            if(err) {
-                console.log(err);
-                return
-            }
-
-            if(stderr) {
-                console.log(stderr);
-                return
-            }
-
-            console.log(stdout);
-        })
-    })
+    
+        return new Promise((resolve, reject) => {
+            exec(`Simple "${path}"`, (err, stdout, stderr) => {
+                if (err) {
+                    resolve({ error: err.message });
+                    return;
+                }
+    
+                if (stderr) {
+                    resolve({ stderr });
+                    return;
+                }
+    
+                resolve({ stdout });
+                console.log(stdout)
+            });
+        });
+    });
 }
 
 

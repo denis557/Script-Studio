@@ -1,1 +1,3 @@
-print(20);
+println("kavo");
+sho = 10;
+println(sho);

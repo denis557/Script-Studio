@@ -1,0 +1,40 @@
+@import '../../styles/main.scss';
+
+.terminal {
+    width: 100%;
+    height: 25vh;
+    min-height: 200px;
+    // max-height: 10vh;
+    border-top: 1px solid $border-dark;
+    background-color: $background-dark;
+    overflow: hidden;
+
+    .terminal-header {
+        width: 100%;
+        margin-top: 1vh;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h1 {
+            color: $header-font-dark;
+            font-size: 1.15vw;
+            margin-left: 0.78125vw;
+            font-weight: 400;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-right: 3.5vw;
+            margin-left: auto;
+            gap: 1.3vw;
+        }
+    }
+
+    .output {
+        color: #fff;
+        margin-left: 1vw;
+        margin-top: 1vh;
+    }
+}

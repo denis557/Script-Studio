@@ -5,7 +5,7 @@
     // height: 3.37vh;
     height: 2.9vh;
     // min-height: 25px;
-    min-height: 20px;
+    // min-height: 20px;
     padding: 0 0.78125vw;
     background-color: $background-dark;
     display: flex;
@@ -21,7 +21,7 @@
         gap: 0.78125vw;
         -webkit-app-region: no-drag;
 
-        input {
+        .file_inpuit {
             display: none;
         }
 

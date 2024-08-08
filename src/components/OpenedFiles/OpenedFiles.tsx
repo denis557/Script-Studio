@@ -48,8 +48,8 @@ function OpenedFiles() {
                 openedFiles.openedFiles.map(file => 
                     <button key={file.path} className={`${selectedFile.path === file.path ? 'selected' : ''}`} onClick={() => handleOpenFile(file)}>
                         {file.name}
+                        {file.isEdited ? <button className='save' onClick={() => updateFile(file)}></button> : ''}
                         <button onClick={(e) => {handleCloseFile(file); e.stopPropagation();}}><CloseFile /></button>
-                        {file.isEdited ? <button onClick={() => updateFile(file)}>Save</button> : 'net'}
                     </button>)
             }
         </div>

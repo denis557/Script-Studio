@@ -1,17 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
 import './Codespace.scss'
+import TextareaAutosize from 'react-textarea-autosize';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editOriginalText, editText } from './selectedFileSlice';
 import { RootState } from '../../app/store';
-import { editOpenedFileText, saveChanges } from '../OpenedFiles/openedFilesSlice';
-const fs = require('fs')
+import { editOriginalText, editText, setSelectedFile } from './selectedFileSlice';
+import { editOpenedFileText, saveChanges, setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
+const fs = require('fs');
 
 function Codespace() {
     const selectedFile = useSelector((state: RootState) => state.selectedFile);
     const dispatch = useDispatch();
     const [lines, setLines] = useState(['1']);
     const textareaRef = useRef(null);
+    const codeSpace = useRef(null);
+
+    const [zoom, setZoom] = useState({ fontSize: 1.04, lineHeight: 1.6 });
+
+    const getFile = (e) => {
+        const files = e.target.files[0];
+        fs.readFile(files.path, 'utf-8', (err: string, data: string) => {
+            if(err) throw err;
+
+            dispatch(setSelectedFile({ name: files.name, path: files.path, originalText: data, text: data, isEdited: false }));
+            dispatch(setOpenedFiles({ name: files.name, path: files.path, originalText: data, text: data, isEdited: false }));
+        });
+    }
 
     const onChange = (e) => {
         dispatch(editText(e.target.value));
@@ -32,7 +45,7 @@ function Codespace() {
     }, [selectedFile.originalText])
 
     useEffect(() => {
-        const textarea = textareaRef.current;
+        const textarea =  textareaRef.current;
         const tabulation = (e) => {
             if (e.keyCode === 9) {
                 e.preventDefault();
@@ -73,24 +86,54 @@ function Codespace() {
             }
         }
 
+        const zoomIn = (e) => {
+            if(e.keyCode === 187 && e.ctrlKey) {
+                if(zoom.fontSize < 3.72) {
+                    e.preventDefault();
+                    setZoom({ fontSize: zoom.fontSize * 1.2, lineHeight: zoom.lineHeight })
+                }
+            }
+        }
+
+        const zoomOut = (e) => {
+            if(e.keyCode === 189 && e.ctrlKey) {
+                if(zoom.fontSize > 0.55) {
+                    e.preventDefault();
+                    setZoom({ fontSize: zoom.fontSize / 1.2, lineHeight: zoom.lineHeight })
+                }
+            }   
+        }
+
         document.addEventListener('keydown', saveFile);
+        document.addEventListener('keydown', zoomIn);
+        document.addEventListener('keydown', zoomOut);
 
         return () => {
             document.removeEventListener('keydown', saveFile);
+            document.removeEventListener('keydown', zoomIn);
+            document.removeEventListener('keydown', zoomOut);
         }
-    }, [dispatch, selectedFile.path]);
+    }, [dispatch, selectedFile.path, selectedFile.text, zoom]);
+
 
     return(
         <div className='codespace'>
+            {/* <input type='file' className='file_space' onChange={getFile} ref={codeSpace} onClick={(e) => e.preventDefault()} /> */}
             {
                 selectedFile.path ?
                     <>
-                        <div className="line-numbers">
+                        <div className="line-numbers" style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}>
                             {lines.map(line => (
-                                <span key={line}>{line}</span>
+                                <span style={{ height: zoom.lineHeight + 'em' }} key={line}>{line}</span>
                             ))}
                         </div>
-                        <TextareaAutosize value={selectedFile.text} onChange={(e) => onChange(e)} className='textarea' ref={textareaRef} />
+                        <TextareaAutosize
+                            value={selectedFile.text} 
+                            onChange={(e) => onChange(e)} 
+                            className='textarea' 
+                            ref={textareaRef} 
+                            style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}
+                        />
                     </>
                 :
                     <h1>No file selected</h1>

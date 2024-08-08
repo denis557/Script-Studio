@@ -4,6 +4,7 @@ import './App.scss'
 import '../styles/global.scss'
 import OpenedFiles from '../components/OpenedFiles/OpenedFiles'
 import Codespace from '../components/Codespace/Codespace'
+import Terminal from '../components/Terminal/Terminal'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <div className='secondWrapper'>
           <OpenedFiles />
           <Codespace />
+          <Terminal />
         </div>
       </div>
     </>

@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
+import folderReducer from '../components/SideBar/selectedFolderSlice'
 import selectedFileReducer from '../components/Codespace/selectedFileSlice'
 import openedFilesReducer from '../components/OpenedFiles/openedFilesSlice'
+import outputReducer from '../components/Terminal/outputSlice'
 
 export const store = configureStore({
   reducer: {
+    folder: folderReducer,
     selectedFile: selectedFileReducer,
-    openedFiles: openedFilesReducer
+    openedFiles: openedFilesReducer,
+    output: outputReducer
   }
 })
 
