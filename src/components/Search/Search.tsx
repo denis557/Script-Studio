@@ -16,6 +16,9 @@ function Search({ input, closeMenu }) {
     const openedFiles = useSelector((state: RootState) => state.openedFiles);
     const menuRef = useRef(null);
     const dispatch = useDispatch();
+    let files = [...folder.files];
+
+    folder.folders.forEach(folderEl => folderEl.files.forEach(fileEl => files.push(fileEl)))
     
     const getFile = (file: FileInterface) => {
         fs.readFile(file.path, 'utf-8', (err: string, data: string) => {
@@ -48,9 +51,21 @@ function Search({ input, closeMenu }) {
         <div className='search' ref={menuRef}>
             {folder.name ?
                 input ? 
-                    folder.files.map(file => file.name.includes(input) ? <button onClick={() => getFile(file)}><div>S</div>{file.name}</button> : '')
+                    files.map(file => file.name.includes(input) ?
+                        <button key={file.path} onClick={() => getFile(file)}>
+                            <div>S</div>
+                            {file.name}
+                            <span>{file.path}</span>
+                        </button>
+                    : '')
                 :
-                    folder.files.map(file => <button onClick={() => getFile(file)}><div>S</div>{file.name}</button>)
+                    files.map(file => 
+                        <button key={file.path} onClick={() => getFile(file)}>
+                            <div>S</div>
+                            {file.name}
+                            <span>{file.path}</span>
+                        </button>
+                    )
             :
                 <p>No folder selected</p>}
         </div>

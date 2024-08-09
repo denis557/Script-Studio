@@ -3,6 +3,9 @@ import './SideBar.scss'
 import { RootState } from '../../app/store'
 import { setSelectedFile } from '../Codespace/selectedFileSlice';
 import { setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
+import { Folder } from '../../assets/sidebar/Folder';
+import { changeFolderState } from './selectedFolderSlice';
+import { OpenedFolder } from '../../assets/sidebar/OpenedFolder';
 const fs = require('fs')
 
 interface FileInterface {
@@ -31,7 +34,18 @@ function SideBar() {
     return(
         <div className='sidebar'>
             {folder.name ? <h1>{folder.name}</h1> : <h1>No folder selected</h1>}
-            {folder.files.map(file => <button key={file.path} onClick={() => getFile(file)}><div>S</div>{file.name}</button>)}
+            {folder.folders.map(folderEl => 
+                <>
+                    <button key={folderEl.files[0].path} onClick={() => dispatch(changeFolderState(folderEl.name))}>
+                        {folderEl.isOpened ? <OpenedFolder /> : <Folder />}{folderEl.name}
+                    </button>
+                    {folderEl.isOpened &&
+                    <div>
+                        {folderEl.files.map(file => <button key={file.path} onClick={() => getFile(file)} className='fileInFolder'>{file.name.split('.')[1] === 'simple' && <div>S</div>}{file.name}</button>)}
+                    </div>}
+                </>
+            )}
+            {folder.files.map(file => <button key={file.path} onClick={() => getFile(file)}>{file.name.split('.')[1] === 'simple' && <div>S</div>}{file.name}</button>)}
         </div>
     )
 }

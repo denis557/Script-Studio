@@ -1,39 +1,36 @@
-import './Codespace.scss'
+import './Codespace.scss';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { editOriginalText, editText, setSelectedFile } from './selectedFileSlice';
-import { editOpenedFileText, saveChanges, setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
+import { editOriginalText, editText } from './selectedFileSlice';
+import { editOpenedFileText, saveChanges } from '../OpenedFiles/openedFilesSlice';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism.css';
+import '../../../SimpleLang/regex/prism-simple'
+
 const fs = require('fs');
 
 function Codespace() {
+    const [zoom, setZoom] = useState({ fontSize: 1.04, lineHeight: 1.6 });
     const selectedFile = useSelector((state: RootState) => state.selectedFile);
     const dispatch = useDispatch();
     const [lines, setLines] = useState(['1']);
     const textareaRef = useRef(null);
-    const codeSpace = useRef(null);
-
-    const [zoom, setZoom] = useState({ fontSize: 1.04, lineHeight: 1.6 });
-
-    const getFile = (e) => {
-        const files = e.target.files[0];
-        fs.readFile(files.path, 'utf-8', (err: string, data: string) => {
-            if(err) throw err;
-
-            dispatch(setSelectedFile({ name: files.name, path: files.path, originalText: data, text: data, isEdited: false }));
-            dispatch(setOpenedFiles({ name: files.name, path: files.path, originalText: data, text: data, isEdited: false }));
-        });
-    }
+    const codeRef = useRef(null);
 
     const onChange = (e) => {
         dispatch(editText(e.target.value));
-        dispatch(editOpenedFileText({ text: e.target.value, path: selectedFile.path }))
+        dispatch(editOpenedFileText({ text: e.target.value, path: selectedFile.path }));
         const newLines = [];
         for (let i = 1; i <= e.target.value.split('\n').length; i++) {
             newLines.push(i);
         }
         setLines(newLines);
+        if (codeRef.current) {
+            // codeRef.current.innerHTML = Prism.highlight(e.target.value, Prism.languages.javascript, 'javascript');
+            codeRef.current.innerHTML = Prism.highlight(e.target.value, Prism.languages.simple, 'simple');
+        }
     }
 
     useEffect(() => {
@@ -42,7 +39,7 @@ function Codespace() {
             newLines.push(i);
         }
         setLines(newLines);
-    }, [selectedFile.originalText])
+    }, [selectedFile.originalText]);
 
     useEffect(() => {
         const textarea =  textareaRef.current;
@@ -53,7 +50,8 @@ function Codespace() {
                 const end = textarea.selectionEnd;
                 const value = textarea.value;
 
-                textarea.value = value.substring(0, start) + "\t" + value.substring(end);
+                // textarea.value = value.substring(0, start) + "\t" + value.substring(end);
+                textarea.value = value.substring(0, start) + "   " + value.substring(end);
                 textarea.selectionStart = textarea.selectionEnd = start + 1;
 
                 dispatch(editText(textarea.value));
@@ -61,14 +59,6 @@ function Codespace() {
             }
         };
 
-        textarea?.addEventListener('keydown', tabulation);
-
-        return () => {
-            textarea?.removeEventListener('keydown', tabulation);
-        };
-    }, [dispatch, selectedFile.path]);
-
-    useEffect(() => {
         const saveFile = (e) => {
             if(e.keyCode === 83 && e.ctrlKey) {
                 e.preventDefault();
@@ -107,18 +97,25 @@ function Codespace() {
         document.addEventListener('keydown', saveFile);
         document.addEventListener('keydown', zoomIn);
         document.addEventListener('keydown', zoomOut);
+        textarea?.addEventListener('keydown', tabulation);
 
         return () => {
             document.removeEventListener('keydown', saveFile);
             document.removeEventListener('keydown', zoomIn);
             document.removeEventListener('keydown', zoomOut);
+            textarea?.removeEventListener('keydown', tabulation);
         }
     }, [dispatch, selectedFile.path, selectedFile.text, zoom]);
 
+    useEffect(() => {
+        if (codeRef.current) {
+            // codeRef.current.innerHTML = Prism.highlight(selectedFile.text, Prism.languages.javascript, 'javascript');
+            codeRef.current.innerHTML = Prism.highlight(selectedFile.text, Prism.languages.simple, 'simple');
+        }
+    }, [selectedFile.text]);
 
-    return(
+    return (
         <div className='codespace'>
-            {/* <input type='file' className='file_space' onChange={getFile} ref={codeSpace} onClick={(e) => e.preventDefault()} /> */}
             {
                 selectedFile.path ?
                     <>
@@ -127,19 +124,28 @@ function Codespace() {
                                 <span style={{ height: zoom.lineHeight + 'em' }} key={line}>{line}</span>
                             ))}
                         </div>
-                        <TextareaAutosize
-                            value={selectedFile.text} 
-                            onChange={(e) => onChange(e)} 
-                            className='textarea' 
-                            ref={textareaRef} 
-                            style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}
-                        />
+                        <div className="code-container">
+                            <pre className="language-simple" ref={codeRef} style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}></pre>
+                            <TextareaAutosize
+                                value={selectedFile.text}
+                                onChange={(e) => onChange(e)}
+                                className='textarea'
+                                ref={textareaRef}
+                                spellCheck={false}
+                                style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}
+                            />
+                        </div>
                     </>
-                :
+                    :
                     <h1>No file selected</h1>
             }
         </div>
     )
 }
 
-export default Codespace
+export default Codespace;
+
+
+            {/* <input type='file' className='file_space' onChange={getFile} ref={codeSpace} onClick={(e) => e.preventDefault()} /> */}
+
+                        

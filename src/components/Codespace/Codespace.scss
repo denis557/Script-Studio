@@ -2,21 +2,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 @import '../../../SimpleLang/syntax/syntax.scss';
 
+// .codespace {
+//     width: 100%;
+//     height: 100%;
+//     // max-height: 66.65vh;
+//     padding: 1.44vh 0 0 1vw;
+//     display: flex;
+//     flex-direction: row;
+//     overflow-y: auto;
+//     overflow-x: hidden;
+
+//     .file_space {
+//         width: 85vw;
+//         height: 80vh;
+//         opacity: 0;
+//         position: absolute;
+//     }
+
+//     .line-numbers {
+//         font-family: "Roboto", "Inter", sans-serif;
+//         height: 91vh;
+//         display: flex;
+//         flex-direction: column;
+//         align-items: flex-end;
+//         margin-right: 1vw;
+//         // font-size: 1.04vw;
+//         font-weight: 300;
+//         color: #AFAFAF;
+//         // line-height: 1.6;
+
+//         span {
+//             display: block;
+//             // height: 1.6em;
+//         }
+//     }
+
+//     .textarea {
+//         font-family: "Consolas", "Readex Pro", sans-serif;
+//         width: 85vw;
+//         resize: none;
+//         background-color: transparent;
+//         border: none;
+//         color: white;
+//         // font-size: 1.04vw;
+//         font-weight: 400;
+//         // line-height: 1.6;
+//         // overflow-x: auto;
+
+//         .keyword {
+//             color: $keyword;
+//         }
+//     }
+// }
+
+
 .codespace {
     width: 100%;
     height: 100%;
-    // max-height: 66.65vh;
     padding: 1.44vh 0 0 1vw;
     display: flex;
     flex-direction: row;
     overflow-y: auto;
     overflow-x: hidden;
 
-    .file_space {
-        width: 85vw;
-        height: 80vh;
-        opacity: 0;
-        position: absolute;
+    p {
+        font-size: 20px;
+        color: white;
     }
 
     .line-numbers {
@@ -37,20 +88,91 @@
         }
     }
 
-    .textarea {
-        font-family: "Consolas", "Readex Pro", sans-serif;
+    .code-container {
+        position: relative;
         width: 85vw;
-        resize: none;
-        background-color: transparent;
-        border: none;
-        color: white;
-        // font-size: 1.04vw;
-        font-weight: 400;
-        // line-height: 1.6;
-        // overflow-x: auto;
+        font-family: "Roboto", "Inter", sans-serif;
 
-        .keyword {
-            color: $keyword;
+        pre {
+            font-family: "Roboto", "Inter", sans-serif;
+            // font-size: 1.04vw;
+            // line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            pointer-events: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-x: hidden;
+            background-color: #252525;
+            // color: #fff;
+            color: $variable;
+            text-shadow: none;
+            -webkit-text-stroke: 0;
+
+            .keyword {
+                color: $keyword;
+            }
+
+            .number {
+                color: $number;
+            }
+
+            .function, .call {
+                color: $function;
+            }
+
+            .string {
+                color: $string;
+            }
+
+            .operator {
+                color: $operators-semicolon;
+                background-color: transparent;
+            }
+
+            .brackets {
+                color: $brackets;
+            }
+
+            .statement {
+                color: $statements
+            }
+
+            .comment {
+                color: $comment
+            }
+
+            .parameter {
+                color: $parameter
+            }
+
+            .function-name {
+                color: $variable
+            }
+
+            .struct-name {
+                color: $structName
+            }
+        }
+
+        .textarea {
+            font-family: "Roboto", "Inter", sans-serif;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: none;
+            border: none;
+            color: transparent;
+            caret-color: white;
+            resize: none;
+            // font-size: 1.04vw;
+            font-weight: 400;
+            // line-height: 1.6;
+            z-index: 1;
+            overflow: hidden;
         }
     }
 }

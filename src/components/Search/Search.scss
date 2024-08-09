@@ -6,7 +6,8 @@
     // height: 19vh;
     height: 18vh;
     padding: 0.5vh 0.26vw;
-    left: 40.4%;
+    // left: 40.4%;
+    left: 36.2%;
     top: 3.3%;
     position: absolute;
     display: flex;
@@ -37,6 +38,11 @@
             font-size: 0.8vw;
             font-weight: 600;
             margin: 0 0.5vw;
+        }
+
+        span {
+            margin-right: 0.7vw;
+            margin-left: auto;
         }
 
         &:hover {

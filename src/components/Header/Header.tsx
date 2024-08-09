@@ -17,16 +17,28 @@ interface FileInterface {
     text: string;
 }
 
+interface ReduxFileInterface {
+    name: string;
+    path: string;
+}
+
+interface SubFolderInterface {
+    name: string,
+    files: FileInterface[],
+    folders: SubFolderInterface[],
+    isOpened: boolean
+}
+
 function Header() {
-    const dispatch = useDispatch();
-    const selectedFile = useSelector((state: RootState) => state.selectedFile);
-    const openedFiles = useSelector((state: RootState) => state.openedFiles);
-    const fileRef = useRef(null);
-    const folderRef = useRef(null);
-    const folder = useSelector((state: RootState) => state.folder);
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false)
+    const selectedFile = useSelector((state: RootState) => state.selectedFile);
+    const openedFiles = useSelector((state: RootState) => state.openedFiles);
+    const folder = useSelector((state: RootState) => state.folder);
     const output = useSelector((state: RootState) => state.output);
+    const fileRef = useRef(null);
+    const folderRef = useRef(null);
+    const dispatch = useDispatch();
 
     const getFile = (e) => {
         const files = e.target.files[0];
@@ -94,7 +106,36 @@ function Header() {
             }
         });
 
-        dispatch(setFolder({ name: genericPath.pop(), files: updatedFiles }))
+        let filesResult: SubFolderInterface[] = [];
+        let foldersResult: SubFolderInterface[] = [];
+
+        for(let i = 0; i < updatedFiles.length; i++) {
+            const updatedPath = updatedFiles[i].path.split(genericPath.join('\\')).pop();
+            let j = 1;
+            let firstElement = updatedPath.split('\\')[j];
+            console.log(firstElement)
+            let isInSubFolder = false;
+            function checkIfFile() {
+                if(firstElement.split('.')[1]) {
+                    if(!isInSubFolder) {
+                        filesResult.push(updatedFiles[i]);
+                    } else {
+                        const parentFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1]);
+                        parentFolder.files.push(updatedFiles[i])
+                    }
+                } else {
+                    const isFolderExists = foldersResult.find(folderEl => folderEl.name === firstElement);
+                    !isFolderExists && foldersResult.push({ name: firstElement, files: [], folders: [], isOpened: false });
+                    isInSubFolder = true
+                    j++;
+                    firstElement = updatedPath.split('\\')[j]
+                    checkIfFile();
+                }
+            }
+            checkIfFile()
+        }
+
+        dispatch(setFolder({ name: genericPath.pop(), files: filesResult, folders: foldersResult }))
 
         return genericPath.join('\\');
     };
@@ -110,9 +151,9 @@ function Header() {
                 <button onClick={() => fileRef.current?.click()}>
                     File
                 </button>
-                <button>
+                {/* <button>
                     Terminal
-                </button>
+                </button> */}
                 <button onClick={() => folderRef.current?.click()}>
                     {/* View */}
                     Folder
@@ -128,9 +169,9 @@ function Header() {
                     onChange={getFolder} 
                     ref={folderRef}
                 />
-                <button>
+                {/* <button>
                     Git
-                </button>
+                </button> */}
             </div>
             <div className='header_run_search'>
                 <button onClick={handleRun}><Run /></button>

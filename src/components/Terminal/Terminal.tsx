@@ -11,10 +11,10 @@ function Terminal() {
         <div className='terminal'>
             <div className='terminal-header'>
                 <h1>Terminal</h1>
-                <div>
+                {/* <div>
                     <Close />
                     <Clear />
-                </div>
+                </div> */}
             </div>
             {/* {output.output && <p className='output'>{output.output}</p>} */}
             {output.output && <pre className='output'>{output.output}</pre>}

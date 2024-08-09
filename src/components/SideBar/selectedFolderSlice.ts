@@ -5,14 +5,23 @@ interface FileInterface {
     path: string;
 }
 
+interface SubFolderInterface {
+    name: string,
+    files: FileInterface[],
+    folders: SubFolderInterface[],
+    isOpened: boolean
+}
+
 interface FolderInterface {
     name: string,
-    files: FileInterface[]
+    files: FileInterface[],
+    folders: SubFolderInterface[]
 }
 
 const initialState: FolderInterface = {
     name: '',
-    files: []
+    files: [],
+    folders: []
 }
 
 export const folderSlice = createSlice({
@@ -22,10 +31,15 @@ export const folderSlice = createSlice({
         setFolder: (state, action: PayloadAction<FolderInterface>) => {
             state.files = action.payload.files;
             state.name = action.payload.name;
+            state.folders = action.payload.folders
         },
+        changeFolderState: (state, action: PayloadAction<string>) => {
+            const currentFolder = state.folders.find(folder => folder.name === action.payload);
+            currentFolder.isOpened = !currentFolder?.isOpened
+        }
     }
 })
 
-export const { setFolder } = folderSlice.actions;
+export const { setFolder, changeFolderState } = folderSlice.actions;
 
 export default folderSlice.reducer
