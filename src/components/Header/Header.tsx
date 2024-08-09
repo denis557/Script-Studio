@@ -40,8 +40,22 @@ function Header() {
     const folderRef = useRef(null);
     const dispatch = useDispatch();
 
+    const checkExtension = (array, file) => {
+        for(let i = 0; i < array.length; i++) {
+            if(file.name.split('.').pop() === array[i]) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     const getFile = (e) => {
         const files = e.target.files[0];
+        const fileCopy = files;
+
+        if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64', 'simple'], fileCopy)) return
+
         fs.readFile(files.path, 'utf-8', (err: string, data: string) => {
             if(err) throw err;
 
