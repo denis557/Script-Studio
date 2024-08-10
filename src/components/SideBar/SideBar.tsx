@@ -18,7 +18,21 @@ function SideBar() {
     const folder = useSelector((state: RootState) => state.folder);
     const openedFiles = useSelector((state: RootState) => state.openedFiles);
 
+    const checkExtension = (array, file) => {
+        for(let i = 0; i < array.length; i++) {
+            if(file.name.split('.').pop() === array[i]) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     const getFile = (file: FileInterface) => {
+        const fileCopy = file;
+        
+        if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64'], fileCopy)) return
+
         fs.readFile(file.path, 'utf-8', (err: string, data: string) => {
             if(err) throw err;
 

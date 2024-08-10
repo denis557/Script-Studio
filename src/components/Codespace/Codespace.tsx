@@ -51,8 +51,8 @@ function Codespace() {
                 const value = textarea.value;
 
                 // textarea.value = value.substring(0, start) + "\t" + value.substring(end);
-                textarea.value = value.substring(0, start) + "   " + value.substring(end);
-                textarea.selectionStart = textarea.selectionEnd = start + 1;
+                textarea.value = value.substring(0, start) + "    " + value.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + 4;
 
                 dispatch(editText(textarea.value));
                 dispatch(editOpenedFileText({ text: textarea.value, path: selectedFile.path }));
@@ -67,7 +67,6 @@ function Codespace() {
                         if (err) {
                             console.error(err);
                         } else {
-                            console.log('updated');
                             dispatch(editOriginalText(selectedFile.text));
                             dispatch(saveChanges({ text: selectedFile.text, path: selectedFile.path }))
                         }
@@ -114,6 +113,43 @@ function Codespace() {
         }
     }, [selectedFile.text]);
 
+    useEffect(() => {
+        const textarea = textareaRef.current;
+    
+        const handleBrackets = (e) => {
+            const bracketsMap = {
+                '(': ')',
+                '{': '}',
+                '[': ']',
+                '"': '"',
+                "'": "'"
+            };
+    
+            const openBracket = e.key;
+            const closeBracket = bracketsMap[openBracket];
+    
+            if (closeBracket) {
+                e.preventDefault();
+    
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const value = textarea.value;
+    
+                textarea.value = value.substring(0, start) + openBracket + closeBracket + value.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
+    
+                dispatch(editText(textarea.value));
+                dispatch(editOpenedFileText({ text: textarea.value, path: selectedFile.path }));
+            }
+        };
+    
+        textarea?.addEventListener('keydown', handleBrackets);
+    
+        return () => {
+            textarea?.removeEventListener('keydown', handleBrackets);
+        };
+    }, [dispatch, selectedFile.path, selectedFile.text]);
+
     return (
         <div className='codespace'>
             {
@@ -137,7 +173,9 @@ function Codespace() {
                         </div>
                     </>
                     :
-                    <h1>No file selected</h1>
+                    <div className='title_div'>
+                        <h1>No file selected</h1>
+                    </div>
             }
         </div>
     )

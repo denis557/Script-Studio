@@ -1,30 +1,17 @@
-# React + TypeScript + Vite
+<div align="center">
+    <img src="./src/assets/Icon256.png"/>
+    <h1>Script Studio</h1>
+    <p>Cross platform IDE</p>
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## About
+I didn't know what app to create, and then my friend developed his own language interpreted by C++. He wanted to add syntax highlighting for it, but it would be difficult to do in Visual Studio. So, I decided to create a separate IDE for his language (I wanna add support for TypeScript in the future).
 
-Currently, two official plugins are available:
+## Stack
+- Typescript
+- React
+- Redux
+- Electron
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## !IMPORTANT!
+Linux and macOS are not currently supported

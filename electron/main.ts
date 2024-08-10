@@ -29,7 +29,9 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(__dirname, '../src/assets/Icon_v2.ico'),
+    // icon: path.join(__dirname, '../src/assets/Icon.ico'),
+    // icon: path.join(__dirname, '../src/assets/Icon256.ico'),
+    icon: path.join(__dirname, '../src/assets/Icon512.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,

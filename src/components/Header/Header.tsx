@@ -54,7 +54,7 @@ function Header() {
         const files = e.target.files[0];
         const fileCopy = files;
 
-        if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64', 'simple'], fileCopy)) return
+        if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64'], fileCopy)) return
 
         fs.readFile(files.path, 'utf-8', (err: string, data: string) => {
             if(err) throw err;

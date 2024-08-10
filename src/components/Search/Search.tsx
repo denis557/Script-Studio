@@ -19,8 +19,22 @@ function Search({ input, closeMenu }) {
     let files = [...folder.files];
 
     folder.folders.forEach(folderEl => folderEl.files.forEach(fileEl => files.push(fileEl)))
+
+    const checkExtension = (array, file) => {
+        for(let i = 0; i < array.length; i++) {
+            if(file.name.split('.').pop() === array[i]) {
+                return true
+            }
+        }
+
+        return false
+    }
     
     const getFile = (file: FileInterface) => {
+        const fileCopy = file;
+        
+        if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64'], fileCopy)) return
+
         fs.readFile(file.path, 'utf-8', (err: string, data: string) => {
             if(err) throw err;
 
@@ -67,7 +81,10 @@ function Search({ input, closeMenu }) {
                         </button>
                     )
             :
-                <p>No folder selected</p>}
+                <div className='search_title'>
+                    <p>No folder selected</p>
+                </div>
+            }
         </div>
     )
 }

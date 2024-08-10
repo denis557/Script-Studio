@@ -2,10 +2,12 @@
 
 .sidebar {
     width: 13.5vw;
+    // min-width: 275px;
     min-width: 13.5vw;
     height: 100%;
     background-color: $background-dark;
     border-right: 1px solid $border-dark;
+    overflow-y: auto;
 
     h1 {
         font-size: 1.35vw;

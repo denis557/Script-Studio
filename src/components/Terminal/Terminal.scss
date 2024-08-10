@@ -2,12 +2,13 @@
 
 .terminal {
     width: 100%;
-    height: 22.7vh;
-    min-height: 200px;
-    // max-height: 10vh;
+    height: 20vh;
+    min-height: 20vh;
     border-top: 1px solid $border-dark;
     background-color: $background-dark;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: #00DC09;
 
     .terminal-header {
         width: 100%;
@@ -17,10 +18,12 @@
         align-items: center;
 
         h1 {
-            color: $header-font-dark;
+            font-family: 'Consolas', sans-serif;
+            // color: $header-font-dark;
             font-size: 1.15vw;
             margin-left: 0.78125vw;
             font-weight: 400;
+            color: #00DC09;
         }
 
         div {
@@ -33,8 +36,10 @@
     }
 
     .output {
-        color: #fff;
+        font-family: 'Consolas', sans-serif;
         margin-left: 1vw;
         margin-top: 1vh;
+        color: #00DC09;
+        font-size: 1vw;
     }
 }
