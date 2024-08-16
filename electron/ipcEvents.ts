@@ -1,5 +1,10 @@
 import { ipcMain, BrowserWindow } from "electron";
 import { exec } from 'child_process'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const events = (win: BrowserWindow) => {
     ipcMain.handle('windowAction', (event, ...args) => {
@@ -21,28 +26,13 @@ const events = (win: BrowserWindow) => {
         }
     })
 
-    // ipcMain.handle('runCode', (event, ...args) => {
-    //     const path = args[0];
-
-    //     exec(`Simple "${path}"`, (err, stdout, stderr) => {
-    //         if(err) {
-    //             console.log(err);
-    //             return
-    //         }
-
-    //         if(stderr) {
-    //             console.log(stderr);
-    //             return
-    //         }
-
-    //         console.log(stdout);
-    //     })
-    // })
     ipcMain.handle('runCode', async (event, ...args) => {
-        const path = args[0];
+        const pathFile = args[0];
+        const relativePath = '../SimpleLang/Simple.exe';
+        const absolutePath = path.resolve(__dirname, relativePath); 
     
         return new Promise((resolve, reject) => {
-            exec(`Simple "${path}"`, (err, stdout, stderr) => {
+            exec(`${absolutePath} "${pathFile}"`, (err, stdout, stderr) => {
                 if (err) {
                     resolve({ error: err.message });
                     return;
@@ -54,7 +44,6 @@ const events = (win: BrowserWindow) => {
                 }
     
                 resolve({ stdout });
-                console.log(stdout)
             });
         });
     });
