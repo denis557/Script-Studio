@@ -174,7 +174,8 @@ function Codespace() {
                     </>
                     :
                     <div className='title_div'>
-                        <h1>No file selected</h1>
+                        <h1>&gt;</h1>
+                        <h2>_</h2>
                     </div>
             }
         </div>

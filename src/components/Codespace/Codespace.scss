@@ -19,11 +19,18 @@
         align-items: center;
         justify-content: center;
 
-        h1 {
-            color: white;
+        h1, h2 {
+            color: #383838;
             font-weight: 500;
             text-align: center;
-            
+            font-size: 18vw;
+            text-shadow: 7px 1px 30px rgb(10, 10, 10);
+            user-select: none;
+        }
+
+        h2 {
+            // margin-bottom: 150px;
+            margin-bottom: 12vh;
         }
     }
 
@@ -76,7 +83,7 @@
                 color: $keyword;
             }
 
-            .number {
+            .number, .digit, .hex {
                 color: $number;
             }
 
@@ -90,6 +97,7 @@
 
             .operator {
                 color: $operators-semicolon;
+                // color: red;
                 background-color: transparent;
             }
 
@@ -113,7 +121,7 @@
                 color: $variable
             }
 
-            .struct-name, .struct {
+            .struct-name, .struct, .enum-name {
                 color: $structName
             }
         }

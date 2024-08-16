@@ -1,6 +1,0 @@
-import Type;
-
-popa = 50;
-println(typeof(popa).name);
-popa = "popa";
-println(typeof(popa).name);
