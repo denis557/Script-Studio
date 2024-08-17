@@ -7,7 +7,7 @@ import { editOriginalText, editText } from './selectedFileSlice';
 import { editOpenedFileText, saveChanges } from '../OpenedFiles/openedFilesSlice';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
-import '../../../SimpleLang/regex/prism-simple'
+import '../../regex/prism-simple'
 
 const fs = require('fs');
 
@@ -15,21 +15,23 @@ function Codespace() {
     const [zoom, setZoom] = useState({ fontSize: 1.04, lineHeight: 1.6 });
     const selectedFile = useSelector((state: RootState) => state.selectedFile);
     const dispatch = useDispatch();
-    const [lines, setLines] = useState(['1']);
-    const textareaRef = useRef(null);
-    const codeRef = useRef(null);
+    const [lines, setLines] = useState([1]);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const codeRef = useRef<HTMLInputElement>(null);
 
-    const onChange = (e) => {
-        dispatch(editText(e.target.value));
-        dispatch(editOpenedFileText({ text: e.target.value, path: selectedFile.path }));
+    const onChange = (e: Event) => {
+        const element = e.target as HTMLInputElement
+        const value = element.value
+
+        dispatch(editText(value));
+        dispatch(editOpenedFileText({ text: value, path: selectedFile.path }));
         const newLines = [];
-        for (let i = 1; i <= e.target.value.split('\n').length; i++) {
+        for (let i = 1; i <= value.split('\n').length; i++) {
             newLines.push(i);
         }
         setLines(newLines);
         if (codeRef.current) {
-            // codeRef.current.innerHTML = Prism.highlight(e.target.value, Prism.languages.javascript, 'javascript');
-            codeRef.current.innerHTML = Prism.highlight(e.target.value, Prism.languages.simple, 'simple');
+            codeRef.current.innerHTML = Prism.highlight(value, Prism.languages.simple, 'simple');
         }
     }
 
@@ -42,16 +44,15 @@ function Codespace() {
     }, [selectedFile.originalText]);
 
     useEffect(() => {
-        const textarea =  textareaRef.current;
-        const tabulation = (e) => {
+        const textarea: HTMLTextAreaElement = textareaRef.current!;
+        const tabulation = (e: KeyboardEvent) => {
             if (e.keyCode === 9) {
                 e.preventDefault();
-                const start = textarea.selectionStart;
-                const end = textarea.selectionEnd;
-                const value = textarea.value;
+                const start = textarea?.selectionStart;
+                const end = textarea?.selectionEnd;
+                const value = textarea?.value;
 
-                // textarea.value = value.substring(0, start) + "\t" + value.substring(end);
-                textarea.value = value.substring(0, start) + "    " + value.substring(end);
+                textarea.value = value?.substring(0, start) + "    " + value?.substring(end);
                 textarea.selectionStart = textarea.selectionEnd = start + 4;
 
                 dispatch(editText(textarea.value));
@@ -59,7 +60,7 @@ function Codespace() {
             }
         };
 
-        const saveFile = (e) => {
+        const saveFile = (e: KeyboardEvent) => {
             if(e.keyCode === 83 && e.ctrlKey) {
                 e.preventDefault();
                 if(selectedFile.originalText !== selectedFile.text) {
@@ -75,7 +76,7 @@ function Codespace() {
             }
         }
 
-        const zoomIn = (e) => {
+        const zoomIn = (e: KeyboardEvent) => {
             if(e.keyCode === 187 && e.ctrlKey) {
                 if(zoom.fontSize < 3.72) {
                     e.preventDefault();
@@ -84,7 +85,7 @@ function Codespace() {
             }
         }
 
-        const zoomOut = (e) => {
+        const zoomOut = (e: KeyboardEvent) => {
             if(e.keyCode === 189 && e.ctrlKey) {
                 if(zoom.fontSize > 0.55) {
                     e.preventDefault();
@@ -108,16 +109,23 @@ function Codespace() {
 
     useEffect(() => {
         if (codeRef.current) {
-            // codeRef.current.innerHTML = Prism.highlight(selectedFile.text, Prism.languages.javascript, 'javascript');
             codeRef.current.innerHTML = Prism.highlight(selectedFile.text, Prism.languages.simple, 'simple');
         }
     }, [selectedFile.text]);
 
     useEffect(() => {
-        const textarea = textareaRef.current;
+        const textarea: HTMLTextAreaElement = textareaRef.current!;
     
-        const handleBrackets = (e) => {
-            const bracketsMap = {
+        const handleBrackets = (e: KeyboardEvent) => {
+            interface bracketsMapInterface {
+                '(': string;
+                '{': string;
+                '[': string;
+                '"': string;
+                "'": string;
+            }
+
+            const bracketsMap: bracketsMapInterface = {
                 '(': ')',
                 '{': '}',
                 '[': ']',
@@ -125,7 +133,7 @@ function Codespace() {
                 "'": "'"
             };
     
-            const openBracket = e.key;
+            const openBracket = e.key as keyof bracketsMapInterface;
             const closeBracket = bracketsMap[openBracket];
     
             if (closeBracket) {
@@ -164,7 +172,7 @@ function Codespace() {
                             <pre className="language-simple" ref={codeRef} style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}></pre>
                             <TextareaAutosize
                                 value={selectedFile.text}
-                                onChange={(e) => onChange(e)}
+                                onChange={(e: any) => onChange(e)}
                                 className='textarea'
                                 ref={textareaRef}
                                 spellCheck={false}

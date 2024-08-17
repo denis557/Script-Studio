@@ -18,7 +18,7 @@ function SideBar() {
     const folder = useSelector((state: RootState) => state.folder);
     const openedFiles = useSelector((state: RootState) => state.openedFiles);
 
-    const checkExtension = (array, file) => {
+    const checkExtension = (array: string[], file: FileInterface) => {
         for(let i = 0; i < array.length; i++) {
             if(file.name.split('.').pop() === array[i]) {
                 return true
@@ -51,15 +51,26 @@ function SideBar() {
             {folder.folders.map(folderEl => 
                 <>
                     <button key={folderEl.files[0].path} onClick={() => dispatch(changeFolderState(folderEl.name))}>
-                        {folderEl.isOpened ? <OpenedFolder /> : <Folder />}{folderEl.name}
+                        {folderEl.isOpened ? <OpenedFolder /> : <Folder />}
+                        <p>{folderEl.name}</p>
                     </button>
                     {folderEl.isOpened &&
-                    <div>
-                        {folderEl.files.map(file => <button key={file.path} onClick={() => getFile(file)} className='fileInFolder'>{file.name.split('.')[1] === 'simple' && <div>S</div>}{file.name}</button>)}
+                    <div key={folderEl.files[1].path}>
+                        {folderEl.files.map(file => 
+                            <button key={file.path} onClick={() => getFile(file)} className='fileInFolder'>
+                                {file.name.split('.')[1] === 'simple' && <div>S</div>}
+                                <p>{file.name}</p>
+                            </button>
+                        )}
                     </div>}
                 </>
             )}
-            {folder.files.map(file => <button key={file.path} onClick={() => getFile(file)}>{file.name.split('.')[1] === 'simple' && <div>S</div>}{file.name}</button>)}
+            {folder.files.map(file => 
+                <button key={file.path} onClick={() => getFile(file)}>
+                    {file.name.split('.')[1] === 'simple' && <div>S</div>}
+                    <p>{file.name}</p>
+                </button>
+            )}
         </div>
     )
 }

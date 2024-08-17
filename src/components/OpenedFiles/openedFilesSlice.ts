@@ -35,7 +35,7 @@ export const openedFilesSlice = createSlice({
             })
         },
         editOpenedFileText: (state, action: PayloadAction<OpenedFile>) => {
-            const openedFile = state.openedFiles.find(file => file.path === action.payload.path);
+            const openedFile: FileInterface = state.openedFiles.find(file => file.path === action.payload.path)!;
             openedFile.text = action.payload.text;
             if(openedFile?.originalText === action.payload.text) {
                 openedFile.isEdited = false
@@ -44,7 +44,7 @@ export const openedFilesSlice = createSlice({
             }
         },
         saveChanges: (state, action: PayloadAction<OpenedFile>) => {
-            const updatedFile = state.openedFiles.find(file => file.path === action.payload.path);
+            const updatedFile: FileInterface = state.openedFiles.find(file => file.path === action.payload.path)!;
             updatedFile.originalText = action.payload.text;
             updatedFile.isEdited = false;
         },

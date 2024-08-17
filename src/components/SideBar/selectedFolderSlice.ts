@@ -34,7 +34,7 @@ export const folderSlice = createSlice({
             state.folders = action.payload.folders
         },
         changeFolderState: (state, action: PayloadAction<string>) => {
-            const currentFolder = state.folders.find(folder => folder.name === action.payload);
+            const currentFolder = state.folders.find(folder => folder.name === action.payload)!;
             currentFolder.isOpened = !currentFolder?.isOpened
         }
     }

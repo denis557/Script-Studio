@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
-@import '../../../SimpleLang/syntax/syntax.scss';
+@import '../../regex/syntax-simple.scss';
 
 
 .codespace {
     width: 100%;
-    height: 100%;
+    height: 72vh;
     padding: 1.44vh 0 0 1vw;
     display: flex;
     flex-direction: row;
@@ -60,6 +60,7 @@
     .code-container {
         position: relative;
         width: 85vw;
+        // height:
         font-family: "Roboto", "Inter", sans-serif;
 
         pre {

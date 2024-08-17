@@ -6,6 +6,9 @@ import events from './ipcEvents'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const iconPath = process.env.NODE_ENV === 'development'
+    ? path.join(__dirname, '../src/assets/Icon512.ico')
+    : path.join(process.resourcesPath, 'assets/Icon512.ico');
 
 // The built directory structure
 //
@@ -31,7 +34,7 @@ function createWindow() {
   win = new BrowserWindow({
     minWidth: 720,
     minHeight: 500,
-    icon: path.join(__dirname, '../src/assets/Icon512.ico'),
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,

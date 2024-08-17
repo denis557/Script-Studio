@@ -11,16 +11,21 @@ interface FileInterface {
     path: string;
 }
 
-function Search({ input, closeMenu }) {
+interface SearchProps {
+    input: string;
+    closeMenu: () => void;
+}
+
+function Search ({ input, closeMenu }: SearchProps) {
     const folder = useSelector((state: RootState) => state.folder);
     const openedFiles = useSelector((state: RootState) => state.openedFiles);
-    const menuRef = useRef(null);
+    const menuRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     let files = [...folder.files];
 
     folder.folders.forEach(folderEl => folderEl.files.forEach(fileEl => files.push(fileEl)))
 
-    const checkExtension = (array, file) => {
+    const checkExtension = (array: string[], file: FileInterface) => {
         for(let i = 0; i < array.length; i++) {
             if(file.name.split('.').pop() === array[i]) {
                 return true
@@ -49,8 +54,8 @@ function Search({ input, closeMenu }) {
     }
 
     useEffect(() => {
-        function handleClickOutside(e) {
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
+        function handleClickOutside(e: Event) {
+            if (menuRef.current && !menuRef.current?.contains(e.target as Node)) {
                 closeMenu();
             }
         }
@@ -65,7 +70,7 @@ function Search({ input, closeMenu }) {
         <div className='search' ref={menuRef}>
             {folder.name ?
                 input ? 
-                    files.map(file => file.name.includes(input) ?
+                    files.map((file) => file.name.includes(input) ?
                         <button key={file.path} onClick={() => getFile(file)}>
                             <div>S</div>
                             {file.name}

@@ -24,9 +24,13 @@ interface ReduxFileInterface {
 
 interface SubFolderInterface {
     name: string,
-    files: FileInterface[],
+    files: ReduxFileInterface[],
     folders: SubFolderInterface[],
     isOpened: boolean
+}
+
+interface FileWithPath extends File {
+    path: string;
 }
 
 function Header() {
@@ -35,12 +39,11 @@ function Header() {
     const selectedFile = useSelector((state: RootState) => state.selectedFile);
     const openedFiles = useSelector((state: RootState) => state.openedFiles);
     const folder = useSelector((state: RootState) => state.folder);
-    const output = useSelector((state: RootState) => state.output);
-    const fileRef = useRef(null);
-    const folderRef = useRef(null);
+    const fileRef = useRef<HTMLInputElement>(null);
+    const folderRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
 
-    const checkExtension = (array, file) => {
+    const checkExtension = (array: string[], file: File) => {
         for(let i = 0; i < array.length; i++) {
             if(file.name.split('.').pop() === array[i]) {
                 return true
@@ -50,7 +53,7 @@ function Header() {
         return false
     }
 
-    const getFile = (e) => {
+    const getFile = (e: any) => {
         const files = e.target.files[0];
         const fileCopy = files;
 
@@ -98,10 +101,12 @@ function Header() {
         }
     }
 
-    const getFolder = (event) => {
+    const getFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
-        const paths = Array.from(files).map(file => file.path.split('\\'));
+        if (!files) return;
+
+        const paths = Array.from(files).map((file: FileWithPath) => file.path.split('\\'));
         const genericPath = [];
 
         for(let i = 0; i < paths[0].length; i++) {
@@ -113,28 +118,28 @@ function Header() {
             }
         }
 
-        const updatedFiles = Array.from(files).map(file => {
+        const updatedFiles: ReduxFileInterface[] = Array.from(files).map(file => {
             return {
                 name: file.name,
                 path: file.path
             }
         });
 
-        let filesResult: SubFolderInterface[] = [];
+        let filesResult: ReduxFileInterface[] = [];
         let foldersResult: SubFolderInterface[] = [];
 
         for(let i = 0; i < updatedFiles.length; i++) {
-            const updatedPath = updatedFiles[i].path.split(genericPath.join('\\')).pop();
+            const updatedPath: string = updatedFiles[i].path.split(genericPath.join('\\')).pop()!;
             let j = 1;
             let firstElement = updatedPath.split('\\')[j];
-            console.log(firstElement)
             let isInSubFolder = false;
+
             function checkIfFile() {
                 if(firstElement.split('.')[1]) {
                     if(!isInSubFolder) {
                         filesResult.push(updatedFiles[i]);
                     } else {
-                        const parentFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1]);
+                        const parentFolder: SubFolderInterface = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1])!;
                         parentFolder.files.push(updatedFiles[i])
                     }
                 } else {
@@ -146,10 +151,11 @@ function Header() {
                     checkIfFile();
                 }
             }
+
             checkIfFile()
         }
 
-        dispatch(setFolder({ name: genericPath.pop(), files: filesResult, folders: foldersResult }))
+        dispatch(setFolder({ name: genericPath.pop()!, files: filesResult, folders: foldersResult }))
 
         return genericPath.join('\\');
     };
@@ -175,13 +181,9 @@ function Header() {
                 <input 
                     className='file_inpuit'
                     type="file" 
-                    webkitdirectory="true" 
-                    mozdirectory="true" 
-                    msdirectory="true" 
-                    odirectory="true" 
-                    directory="true"
                     onChange={getFolder} 
                     ref={folderRef}
+                    {...{ webkitdirectory: "true", mozdirectory: "true", msdirectory: "true", odirectory: "true", directory: "true" }}
                 />
                 {/* <button>
                     Git

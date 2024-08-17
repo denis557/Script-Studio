@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const events = (win: BrowserWindow) => {
-    ipcMain.handle('windowAction', (event, ...args) => {
+    ipcMain.handle('windowAction', (_event, ...args) => {
         const action = args[0];
 
         if(action === 'close') {
@@ -26,12 +26,16 @@ const events = (win: BrowserWindow) => {
         }
     })
 
-    ipcMain.handle('runCode', async (event, ...args) => {
+    ipcMain.handle('runCode', async (_event, ...args) => {
         const pathFile = args[0];
-        const relativePath = '../SimpleLang/Simple.exe';
-        const absolutePath = path.resolve(__dirname, relativePath); 
+
+        const isDevelopment = process.env.NODE_ENV === 'development';
+
+        const absolutePath = isDevelopment
+            ? path.resolve(__dirname, '../SimpleLang/Simple.exe')
+            : path.join(path.dirname(process.execPath), 'SimpleLang', 'Simple.exe');
     
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             exec(`${absolutePath} "${pathFile}"`, (err, stdout, stderr) => {
                 if (err) {
                     resolve({ error: err.message });

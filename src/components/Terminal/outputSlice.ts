@@ -13,11 +13,14 @@ export const outputSlice = createSlice({
     initialState,
     reducers: {
         setOutput: (state, action: PayloadAction<string>) => {
-            state.output = action.payload;
+            state.output += action.payload;
+        },
+        clearOutput: (state) => {
+            state.output = '';
         }
     }
 })
 
-export const { setOutput } = outputSlice.actions;
+export const { setOutput, clearOutput } = outputSlice.actions;
 
 export default outputSlice.reducer
