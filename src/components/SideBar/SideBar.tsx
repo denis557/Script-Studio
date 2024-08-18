@@ -45,34 +45,73 @@ function SideBar() {
         });
     }
 
+    const renderFolder = (folder) => {
+        console.log(folder)
+        return (
+            <>
+                {folder.isOpened !== undefined && 
+                    <button key={folder.name} onClick={() => dispatch(changeFolderState(folder.name))}>
+                        {folder.isOpened ? <OpenedFolder /> : <Folder />}
+                        <span>{folder.name}</span>
+                    </button>
+                }
+                {folder.isOpened === undefined && 
+                    folder.folders.map(folderEl => 
+                        renderFolder(folderEl)
+                    )
+                }
+                {folder.isOpened && (
+                    <div>
+                        {folder.folders.map(subFolder => renderFolder(subFolder))}
+                        {folder.files.map(file => (
+                            <button key={file.name} className="fileInFolder" onClick={() => getFile(file)}>
+                                {file.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
+                {folder.isOpened === undefined && 
+                    folder.files.map(file => 
+                        <button key={file.path} onClick={() => getFile(file)}>
+                            <p>{file.name}</p>
+                        </button>
+                    )
+                }
+            </>
+        );
+    };
+
     return(
         <div className='sidebar'>
             {folder.name ? <h1>{folder.name}</h1> : <h1>No folder selected</h1>}
-            {folder.folders.map(folderEl => 
-                <>
-                    <button key={folderEl.files[0].path} onClick={() => dispatch(changeFolderState(folderEl.name))}>
-                        {folderEl.isOpened ? <OpenedFolder /> : <Folder />}
-                        <p>{folderEl.name}</p>
-                    </button>
-                    {folderEl.isOpened &&
-                    <div key={folderEl.files[1].path}>
-                        {folderEl.files.map(file => 
-                            <button key={file.path} onClick={() => getFile(file)} className='fileInFolder'>
-                                {file.name.split('.')[1] === 'simple' && <div>S</div>}
-                                <p>{file.name}</p>
-                            </button>
-                        )}
-                    </div>}
-                </>
-            )}
-            {folder.files.map(file => 
-                <button key={file.path} onClick={() => getFile(file)}>
-                    {file.name.split('.')[1] === 'simple' && <div>S</div>}
-                    <p>{file.name}</p>
-                </button>
-            )}
+            {renderFolder(folder)}
         </div>
     )
 }
 
 export default SideBar
+
+
+// {folder.folders.map(folderEl => 
+//     <>
+//         <button key={folderEl.files[0].path} onClick={() => dispatch(changeFolderState(folderEl.name))}>
+//             {folderEl.isOpened ? <OpenedFolder /> : <Folder />}
+//             <p>{folderEl.name}</p>
+//         </button>
+//         {folderEl.isOpened &&
+//         <div key={folderEl.files[0].path}>
+//             {folderEl.files.map(file => 
+//                 <button key={file.path} onClick={() => getFile(file)} className='fileInFolder'>
+//                     {file.name.split('.')[1] === 'simple' && <div>S</div>}
+//                     <p>{file.name}</p>
+//                 </button>
+//             )}
+//         </div>}
+//     </>
+// )}
+// {folder.files.map(file => 
+//     <button key={file.path} onClick={() => getFile(file)}>
+//         {file.name.split('.')[1] === 'simple' && <div>S</div>}
+//         <p>{file.name}</p>
+//     </button>
+// )}

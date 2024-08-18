@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: row;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 
     .title_div {
         width: 100%;
@@ -29,7 +29,6 @@
         }
 
         h2 {
-            // margin-bottom: 150px;
             margin-bottom: 12vh;
         }
     }
@@ -59,8 +58,7 @@
 
     .code-container {
         position: relative;
-        width: 85vw;
-        // height:
+        width: 82vw;
         font-family: "Roboto", "Inter", sans-serif;
 
         pre {
@@ -71,14 +69,13 @@
             padding: 0;
             width: 100%;
             pointer-events: none;
-            white-space: pre-wrap;
-            word-break: break-word;
+            white-space: pre;
             overflow-x: hidden;
             background-color: #252525;
-            // color: #fff;
             color: $variable;
             text-shadow: none;
             -webkit-text-stroke: 0;
+            tab-size: 4;
 
             .keyword {
                 color: $keyword;
@@ -98,7 +95,6 @@
 
             .operator {
                 color: $operators-semicolon;
-                // color: red;
                 background-color: transparent;
             }
 
@@ -133,7 +129,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            // height: 100%;
             background: none;
             border: none;
             color: transparent;
@@ -143,7 +139,72 @@
             font-weight: 400;
             line-height: 1.6;
             z-index: 1;
-            overflow: hidden;
+            overflow-x: auto;
+            white-space: pre;
+            tab-size: 4;
+
+            &::-webkit-scrollbar {
+                height: 7px;
+                background-color: rgba(0, 0, 0, 10%);
+                border-radius: 10px;
+                cursor: default;
+                position: sticky;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #383838;
+                border-radius: 10px;
+                cursor: default;
+            }
         }
     }
 }
+
+// overflow-x: auto; 
+// white-space: nowrap;
+
+
+// .keyword {
+    //         color: $keyword;
+    //     }
+
+    //     .number, .digit, .hex {
+    //         color: $number;
+    //     }
+
+    //     .function, .call {
+    //         color: $function;
+    //     }
+
+    //     .string {
+    //         color: $string;
+    //     }
+
+    //     .operator {
+    //         color: $operators-semicolon;
+    //         background-color: transparent;
+    //     }
+
+    //     .brackets {
+    //         color: $brackets;
+    //     }
+
+    //     .statement {
+    //         color: $statements
+    //     }
+
+    //     .comment {
+    //         color: $comment
+    //     }
+
+    //     .parameter {
+    //         color: $parameter
+    //     }
+
+    //     .function-name {
+    //         color: $variable
+    //     }
+
+    //     .struct-name, .struct, .enum-name {
+    //         color: $structName
+    //     }

@@ -4,10 +4,26 @@
     width: 13.5vw;
     // min-width: 275px;
     min-width: 13.5vw;
-    height: 100%;
+    // height: 100%;
+    height: 97.4vh;
     background-color: $background-dark;
     border-right: 1px solid $border-dark;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        // background-color: rgba(0, 0, 0, 10%);
+        background-color: $background-dark;
+        border-radius: 10px;
+        cursor: default;
+        position: sticky;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #383838;
+        border-radius: 10px;
+        cursor: default;
+    }
 
     h1 {
         font-size: 1.35vw;

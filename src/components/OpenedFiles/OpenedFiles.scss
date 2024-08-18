@@ -1,15 +1,35 @@
 @import '../../styles/main.scss';
 
 .openedFiles {
-    width: 100%;
+    width: 86.3vw;
     height: 3.8vh;
     min-height: 3.8vh;
     background-color: $background-dark;
     border-bottom: 1px solid $border-dark;
     display: flex;
     flex-direction: row;
+    flex-shrink: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+        height: 7px;
+        background-color: rgba(0, 0, 0, 10%);
+        // background-color: $background-dark;
+        border-radius: 10px;
+        cursor: default;
+        position: sticky;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #383838;
+        border-radius: 10px;
+        cursor: default;
+    }
 
     button {
+        width: fit-content;
+        min-width: fit-content;
         height: 100%;
         border: none;
         background-color: transparent;
@@ -32,13 +52,6 @@
         }
 
         button {
-            // background-color: #fff;
-            // width: 0.52vw;
-            // height: 0.52vw;
-            // min-height: 7px;
-            // min-width: 7px;
-            // border-radius: 500px;
-
             width: fit-content;
             height: fit-content;
             border: none;

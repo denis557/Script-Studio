@@ -24,6 +24,19 @@ const initialState: FolderInterface = {
     folders: []
 }
 
+const toggleFolderStateRecursive = (folders: SubFolderInterface[], folderName: string): boolean => {
+    for (const folder of folders) {
+        if (folder.name === folderName) {
+            folder.isOpened = !folder.isOpened;
+            return true;
+        }
+        if (toggleFolderStateRecursive(folder.folders, folderName)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 export const folderSlice = createSlice({
     name: 'folderSlice',
     initialState,
@@ -34,8 +47,7 @@ export const folderSlice = createSlice({
             state.folders = action.payload.folders
         },
         changeFolderState: (state, action: PayloadAction<string>) => {
-            const currentFolder = state.folders.find(folder => folder.name === action.payload)!;
-            currentFolder.isOpened = !currentFolder?.isOpened
+            toggleFolderStateRecursive(state.folders, action.payload)
         }
     }
 })

@@ -52,8 +52,9 @@ function Codespace() {
                 const end = textarea?.selectionEnd;
                 const value = textarea?.value;
 
-                textarea.value = value?.substring(0, start) + "    " + value?.substring(end);
-                textarea.selectionStart = textarea.selectionEnd = start + 4;
+                // textarea.value = value?.substring(0, start) + "    " + value?.substring(end);
+                textarea.value = value?.substring(0, start) + "\t" + value?.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
 
                 dispatch(editText(textarea.value));
                 dispatch(editOpenedFileText({ text: textarea.value, path: selectedFile.path }));
@@ -158,6 +159,27 @@ function Codespace() {
         };
     }, [dispatch, selectedFile.path, selectedFile.text]);
 
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        const pre = codeRef.current;
+    
+        const syncScroll = () => {
+            if (pre) {
+                pre.scrollLeft = textarea.scrollLeft;
+            }
+        };
+    
+        if (textarea) {
+            textarea.addEventListener('scroll', syncScroll);
+        }
+    
+        return () => {
+            if (textarea) {
+                textarea.removeEventListener('scroll', syncScroll);
+            }
+        };
+    }, [dispatch, selectedFile.path, selectedFile.text, zoom]);
+
     return (
         <div className='codespace'>
             {
@@ -194,5 +216,3 @@ export default Codespace;
 
 
             {/* <input type='file' className='file_space' onChange={getFile} ref={codeSpace} onClick={(e) => e.preventDefault()} /> */}
-
-                        

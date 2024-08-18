@@ -62,13 +62,27 @@
             cursor: pointer;
 
             svg {
-                // width: 1.5625vw;
-                // height: 1.5625vw;
-                width: 1.35vw;
-                height: 1.35vw;
+                margin-top: 1px;
+                width: 0.78125vw;
+                height: 1.538vh;
                 min-width: 14px;
                 min-height: 14px;
                 -webkit-app-region: no-drag;
+                transition: all ease-in-out 0.18s;
+
+                path {
+                    transition: all ease-in-out 0.3s;
+                }
+                
+                &:hover path {
+                    transition: all ease-in-out 0.3s;
+                    fill: #78FF96;
+                }
+
+                &:hover {
+                    transition: all ease-in-out 0.18s;
+                    filter: drop-shadow(0 0 20px rgba(41, 211, 78, 41.33%));
+                }
             }
         }
     }
