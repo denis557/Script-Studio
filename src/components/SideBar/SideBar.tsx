@@ -6,11 +6,25 @@ import { setOpenedFiles } from '../OpenedFiles/openedFilesSlice';
 import { Folder } from '../../assets/sidebar/Folder';
 import { changeFolderState } from './selectedFolderSlice';
 import { OpenedFolder } from '../../assets/sidebar/OpenedFolder';
+import { ReactElement } from 'react';
 const fs = require('fs')
 
 interface FileInterface {
     name: string;
     path: string;
+}
+
+interface SubFolderInterface {
+    name: string,
+    files: FileInterface[],
+    folders: SubFolderInterface[],
+    isOpened: boolean
+}
+
+interface FolderInterface {
+    name: string,
+    files: FileInterface[],
+    folders: SubFolderInterface[]
 }
 
 function SideBar() {
@@ -45,8 +59,7 @@ function SideBar() {
         });
     }
 
-    const renderFolder = (folder) => {
-        console.log(folder)
+    const renderFolder = (folder: any): ReactElement => {
         return (
             <>
                 {folder.isOpened !== undefined && 
@@ -56,14 +69,14 @@ function SideBar() {
                     </button>
                 }
                 {folder.isOpened === undefined && 
-                    folder.folders.map(folderEl => 
+                    folder.folders.map((folderEl: SubFolderInterface) => 
                         renderFolder(folderEl)
                     )
                 }
                 {folder.isOpened && (
                     <div>
-                        {folder.folders.map(subFolder => renderFolder(subFolder))}
-                        {folder.files.map(file => (
+                        {folder.folders.map((subFolder: SubFolderInterface) => renderFolder(subFolder))}
+                        {folder.files.map((file: FileInterface) => (
                             <button key={file.name} className="fileInFolder" onClick={() => getFile(file)}>
                                 {file.name}
                             </button>
@@ -71,7 +84,7 @@ function SideBar() {
                     </div>
                 )}
                 {folder.isOpened === undefined && 
-                    folder.files.map(file => 
+                    folder.files.map((file: FileInterface) => 
                         <button key={file.path} onClick={() => getFile(file)}>
                             <p>{file.name}</p>
                         </button>

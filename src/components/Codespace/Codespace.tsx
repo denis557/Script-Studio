@@ -160,7 +160,7 @@ function Codespace() {
     }, [dispatch, selectedFile.path, selectedFile.text]);
 
     useEffect(() => {
-        const textarea = textareaRef.current;
+        const textarea: HTMLTextAreaElement = textareaRef.current!;
         const pre = codeRef.current;
     
         const syncScroll = () => {

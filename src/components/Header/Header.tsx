@@ -14,7 +14,8 @@ const fs = require('fs')
 
 interface FileInterface {
     path: string;
-    text: string;
+    text?: string;
+    name?: string;
 }
 
 interface ReduxFileInterface {
@@ -29,9 +30,17 @@ interface SubFolderInterface {
     isOpened: boolean
 }
 
-interface FileWithPath extends File {
-    path: string;
+interface FolderInterface {
+    name: string,
+    files: FileInterface[],
+    folders: SubFolderInterface[]
 }
+
+const initialFolderStructure: FolderInterface = {
+    name: 'Root',
+    files: [],
+    folders: []
+};
 
 function Header() {
     const [search, setSearch] = useState('');
@@ -77,8 +86,8 @@ function Header() {
             if (err) {
               console.error(err);
             } else {
-              dispatch(editOriginalText(file.text));
-              dispatch(saveChanges({ text: file.text, path: file.path }))
+              dispatch(editOriginalText(file.text!));
+              dispatch(saveChanges({ text: file.text!, path: file.path }))
             }
         });
     }
@@ -102,115 +111,10 @@ function Header() {
         }
     }
 
-    // const getFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const files = event.target.files;
-    //     console.log(files);
-
-    //     if (!files) return;
-
-    //     const paths = Array.from(files).map((file: FileWithPath) => file.path.split('\\'));
-    //     const genericPath = [];
-
-    //     for(let i = 0; i < paths[0].length; i++) {
-    //         const currentPath = paths[0][i];
-    //         if(paths.every(path => path[i] == currentPath)) {
-    //             genericPath.push(currentPath);
-    //         } else {
-    //             break;
-    //         }
-    //     }
-
-    //     const updatedFiles: ReduxFileInterface[] = Array.from(files).map(file => {
-    //         return {
-    //             name: file.name,
-    //             path: file.path
-    //         }
-    //     });
-
-    //     let filesResult: ReduxFileInterface[] = [];
-    //     let foldersResult: SubFolderInterface[] = [];
-
-    //     for(let i = 0; i < updatedFiles.length; i++) {
-    //         const updatedPath: string = updatedFiles[i].path.split(genericPath.join('\\')).pop()!;
-    //         let j = 1;
-    //         let firstElement = updatedPath.split('\\')[j];
-    //         let isInSubFolder = false;
-    //         let isInSubSubFolder = false;
-
-    //         function checkIfFile() {
-    //             if(firstElement.split('.')[1]) {
-    //                 if(isInSubSubFolder) {
-
-    //                     const firstFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[1]);
-    //                     const parentSubFolder = firstFolder?.folders.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1])
-    //                     parentSubFolder?.files.push(updatedFiles[i])
-
-    //                 } else if(!isInSubFolder) {
-
-    //                     filesResult.push(updatedFiles[i]);
-
-    //                 } else if(isInSubFolder) {
-
-    //                     const parentFolder: SubFolderInterface = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1])!;
-    //                     const firstFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[1]);
-    //                     const parentSubFolder = firstFolder?.folders.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1])
-    //                     parentFolder.files.push(updatedFiles[i])
-
-    //                 }
-    //             } else {
-    //                 if(j === 1) {
-
-    //                     const isFolderExists = foldersResult.find(folderEl => folderEl.name === firstElement);
-    //                     !isFolderExists && foldersResult.push({ name: firstElement, files: [], folders: [], isOpened: false });
-    //                     isInSubFolder = true
-    //                     j++;
-    //                     firstElement = updatedPath.split('\\')[j]
-    //                     checkIfFile();
-
-    //                 } else if(j === 2) {
-
-    //                     const parentFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[j - 1])!;
-    //                     const isFolderExists = parentFolder.folders.find(folderEl => folderEl.name === firstElement);
-    //                     !isFolderExists && parentFolder.folders.push({ name: firstElement, files: [], folders: [], isOpened: false });
-    //                     isInSubFolder = false
-    //                     isInSubSubFolder = true;
-    //                     j++;
-    //                     firstElement = updatedPath.split('\\')[j]
-    //                     checkIfFile();
-                        
-    //                 }
-    //                 //  else {
-    //                 //     const firstFolder = foldersResult.find(folderEl => folderEl.name === updatedPath.split('\\')[1])!;
-                        
-    //                 // }
-    //             }
-    //         }
-
-    //         checkIfFile()
-    //     }
-
-    //     dispatch(setFolder({ name: genericPath.pop()!, files: filesResult, folders: foldersResult }))
-    //     console.log(foldersResult)
-
-    //     return genericPath.join('\\');
-    // };
-
-    interface FolderInterface {
-        name: string,
-        files: FileInterface[],
-        folders: SubFolderInterface[]
-    }
-
-    const initialFolderStructure: FolderInterface = {
-        name: 'Root',
-        files: [],
-        folders: []
-    };
-
-    function getFolder(e, folderStructure: FolderInterface) {
+    function getFolder(e: React.ChangeEvent<HTMLInputElement>, folderStructure: FolderInterface) {
         const files = e.target.files;
 
-        Array.from(files).forEach(file => {
+        Array.from(files!).forEach(file => {
             const parts = file.webkitRelativePath.split('/');
             let currentFolder = folderStructure;
     
@@ -261,7 +165,6 @@ function Header() {
                 <input 
                     className='file_inpuit'
                     type="file" 
-                    // onChange={getFolder} 
                     onChange={(e) => getFolder(e, initialFolderStructure)}
                     ref={folderRef}
                     {...{ webkitdirectory: "true", mozdirectory: "true", msdirectory: "true", odirectory: "true", directory: "true" }}
