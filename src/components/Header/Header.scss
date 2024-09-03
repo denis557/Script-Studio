@@ -88,20 +88,16 @@
     }
 
     input {
-        // width: 30.75vw;
         width: 30.25vw;
         min-width: 300px;
-        // height: 2.45vh;
-        height: 2.1vh;
-        min-height: 16px;
-        // padding-left: 0.5vw;
+        height: 1.8vh;
+        min-height: 13px;
         padding: 0 0.5vw;
         background-color: $codespace-dark;
         border: 1px solid $border-dark;
         border-radius: 0.15625vw;
         color: $header-font-dark;
-        // font-size: 1vw;
-        font-size: 0.9vw;
+        font-size: 0.85vw;
         font-weight: 300;
         -webkit-app-region: no-drag;
 
