@@ -8,6 +8,7 @@ import { editOpenedFileText, saveChanges } from '../OpenedFiles/openedFilesSlice
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
 import '../../regex/prism-simple'
+import Hints from '../Hints/Hints';
 
 const fs = require('fs');
 
@@ -208,6 +209,7 @@ function Codespace() {
                         <h2>_</h2>
                     </div>
             }
+            <Hints />
         </div>
     )
 }
