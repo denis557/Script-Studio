@@ -19,6 +19,8 @@ function Codespace() {
     const [lines, setLines] = useState([1]);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
+    const [cursorPosition, setCursorPosition] = useState({ top: 0, left: 0 });
+    const [currentLineState, setCurrentLineState] = useState('');
 
     const onChange = (e: Event) => {
         const element = e.target as HTMLInputElement
@@ -26,6 +28,7 @@ function Codespace() {
 
         dispatch(editText(value));
         dispatch(editOpenedFileText({ text: value, path: selectedFile.path }));
+
         const newLines = [];
         for (let i = 1; i <= value.split('\n').length; i++) {
             newLines.push(i);
@@ -33,6 +36,36 @@ function Codespace() {
         setLines(newLines);
         if (codeRef.current) {
             codeRef.current.innerHTML = Prism.highlight(value, Prism.languages.simple, 'simple');
+        }
+
+        const getCurrentLineText = () => {
+            if (textareaRef.current) {
+                const cursorPosition = textareaRef.current.selectionStart;
+                const textBeforeCursor = value.slice(0, cursorPosition);
+                const currentLineIndex = textBeforeCursor.split('\n').length - 1;
+                const currentLineText = value.split('\n')[currentLineIndex];
+                
+                setCurrentLineState(currentLineText);
+                return currentLineText;
+            }
+            setCurrentLineState('')
+            return '';
+        }
+
+        getCurrentLineText()
+
+        if (textareaRef.current) {
+            const { top, left } = textareaRef.current.getBoundingClientRect();
+            const cursorPos = textareaRef.current.selectionStart;
+            const textBeforeCursor = value.slice(0, cursorPos);
+            const linesBeforeCursor = textBeforeCursor.split('\n');
+            const currentLine = linesBeforeCursor[linesBeforeCursor.length - 1];
+
+            const lineHeight = parseFloat(getComputedStyle(textareaRef.current).lineHeight);
+            const cursorX = left + currentLine.length * (zoom.fontSize * 10);
+            const cursorY = top + (linesBeforeCursor.length - 1) * lineHeight;
+
+            setCursorPosition({ top: cursorY + 10, left: cursorX + 10 });
         }
     }
 
@@ -200,6 +233,8 @@ function Codespace() {
                                 ref={textareaRef}
                                 spellCheck={false}
                                 style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}
+                                onBlur={() => setCursorPosition({ top: 0, left: 0 })}
+                                onClick={() => setCursorPosition({ top: 0, left: 0 })}
                             />
                         </div>
                     </>
@@ -209,7 +244,7 @@ function Codespace() {
                         <h2>_</h2>
                     </div>
             }
-            <Hints />
+            <Hints cursorPosition={cursorPosition} currentLine={currentLineState} />
         </div>
     )
 }

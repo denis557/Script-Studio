@@ -1,0 +1,17 @@
+@import url('../../styles/global.scss');
+
+.hints {
+    width: 220px;
+    height: fit-content;
+    max-height: 250px;
+    border-radius: 2px;
+    background-color: #2b2b2b;
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+
+    p {
+        width: 100%;
+    }
+}
