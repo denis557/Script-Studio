@@ -18,3 +18,6 @@ Prism.languages.simple = {
     'operator': /[+\-*/=<>!&|^%:,.]+|[;]/,
     'brackets': /(\(|\)|{|}|\[|\])/,
 }
+
+
+// % can be part of a number

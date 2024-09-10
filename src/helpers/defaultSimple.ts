@@ -1,9 +1,9 @@
 // const def = ['func', 'struct', 'print', 'println', 'const', 'input', 'mod', 'str', 'num', 'Array', 'print_array', 'push', 'pop', 'split', 'map', 'clear', 'empty', 'join', 'if', 'else', 'while', 'for', 'do', 'foreach', 'switch', 'case', 'try', 'catch', 'destruct', 'import', 'Math'];
 export const def = [
     'Array', 'Math', 'Type', 'case', 'catch', 'clear', 'const', 'destruct', 'do {\n\t\n} while (true)', 'else', 
-    'empty', 'for (i = 0; i < length; ++i) {\n\t\n}', 'foreach', 'func', 'if', 'import', 'input', 'join', 'map', 'mod', 
+    'empty', 'for (i = 0; i < length; ++i) {\n\t\n}', 'foreach (el : collection) {\n\t\n}', 'func MyFunc () {\n\t\n}', 'if (true) {\n\t\n}', 'import', 'input', 'join', 'map', 'mod', 
     'num', 'pop', 'print', 'print_array', 'println', 'push', 'split', 'str', 'struct MyStruct {\n\t\n}', 
-    'switch', 'try', 'while (true) {\n\t\n}'
+    'switch (true) {\n\tcase true {}\n\tcase false {}\n\tdefault {}\n}', 'try {\n\t\n} catch (ex : type) {\n\t\n}', 'while (true) {\n\t\n}', 'immutable', 'default'
 ]
 export const math = [
     'abs', 'acos', 'asin', 'atan', 'atan2', 'cbrt', 

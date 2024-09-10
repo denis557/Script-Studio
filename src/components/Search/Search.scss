@@ -16,7 +16,21 @@
     border: 1px solid $border-dark;
     background-color: $codespace-dark;
     z-index: 9999;
+    overflow: hidden;
+    overflow-y: auto;
 
+    &::-webkit-scrollbar {
+        width: 7px;
+        background-color: rgba(0, 0, 0, 10%);
+        border-radius: 10px;
+        cursor: default;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #383838;
+        border-radius: 10px;
+        cursor: default;
+    }
 
     .search_title {
         width: 100%;

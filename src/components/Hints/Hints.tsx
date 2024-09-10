@@ -108,7 +108,15 @@ const Hints: FC<HintsProps> = ({ cursorPosition, currentLine, handleSelectSugges
                     className={index === activeIndex ? 'active' : ''}
                     onClick={() => handleSelectSuggestion(el)}
                 >
-                    {el.includes('for (') ? 'for' : el.includes('do {') ? 'do' : el.includes('while (') ? 'while' : el.includes('struct MyStruct') ? 'struct' : el}
+                    {el.includes('for (') ? 'for'
+                    : el.includes('do {') ? 'do' 
+                    : el.includes('while (') ? 'while' 
+                    : el.includes('struct MyStruct') ? 'struct' 
+                    : el.includes('switch') ? 'switch' 
+                    : el.includes('func MyFunc ()') ? 'func' 
+                    : el.includes('try {') ? 'try' 
+                    : el.includes('foreach (') ? 'foreach' 
+                    : el.includes('if (') ? 'if' : el}
                     {generateImportWarning(el)}
                 </div>
             ))}
