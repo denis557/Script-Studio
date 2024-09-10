@@ -65,7 +65,6 @@ function Header() {
     const getFile = (e: any) => {
         const files = e.target.files[0];
         const fileCopy = files;
-        console.log(files)
 
         if (checkExtension(['exe', 'dll', 'lib', 'bat', 'app', 'apk', 'bin', 'x86', 'x64'], fileCopy)) return
 

@@ -9,6 +9,7 @@ import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
 import '../../regex/prism-simple'
 import Hints from '../Hints/Hints';
+import { def, math, type, time, exception, system } from '../../helpers/defaultSimple';
 
 const fs = require('fs');
 
@@ -69,6 +70,53 @@ function Codespace() {
         }
     }
 
+    const handleSelectSuggestion = (suggestion: string) => {
+        if (textareaRef.current && cursorPosition.top !== 0) {
+            const cursorPosition = textareaRef.current.selectionStart;
+            const textBeforeCursor = selectedFile.text.slice(0, cursorPosition);
+            const textAfterCursor = selectedFile.text.slice(cursorPosition);
+    
+            const lastWordMatch = textBeforeCursor.match(/(\S+)$/);
+            const lastWordIndex = lastWordMatch ? lastWordMatch.index : cursorPosition;
+    
+            const newText = textBeforeCursor.slice(0, lastWordIndex) + suggestion + textAfterCursor;
+
+            let updatedText = newText;
+
+            const importsMap = {
+                'math': 'import Math;',
+                'type': 'import Type;',
+                'time': 'import Time;',
+                'exception': 'import Exception;',
+                'system': 'import System;'
+            };
+
+            if (math.includes(suggestion) && !updatedText.includes(importsMap.math)) {
+                updatedText = importsMap.math + '\n' + updatedText;
+            }
+            if (type.includes(suggestion) && !updatedText.includes(importsMap.type)) {
+                updatedText = importsMap.type + '\n' + updatedText;
+            }
+            if (time.includes(suggestion) && !updatedText.includes(importsMap.time)) {
+                updatedText = importsMap.time + '\n' + updatedText;
+            }
+            if (exception.includes(suggestion) && !updatedText.includes(importsMap.exception)) {
+                updatedText = importsMap.exception + '\n' + updatedText;
+            }
+            if (system.includes(suggestion) && !updatedText.includes(importsMap.system)) {
+                updatedText = importsMap.system + '\n' + updatedText;
+            }
+    
+            dispatch(editText(updatedText));
+            dispatch(editOpenedFileText({ text: newText, path: selectedFile.path }));
+    
+            const newCursorPosition = lastWordIndex! + suggestion.length;
+            textareaRef.current.setSelectionRange(newCursorPosition, newCursorPosition);
+            textareaRef.current.focus();
+            setCursorPosition({ top: 0, left: 0 })
+        }
+    };
+
     useEffect(() => {
         const newLines = [];
         for (let i = 1; i <= selectedFile.originalText.split('\n').length; i++) {
@@ -80,13 +128,12 @@ function Codespace() {
     useEffect(() => {
         const textarea: HTMLTextAreaElement = textareaRef.current!;
         const tabulation = (e: KeyboardEvent) => {
-            if (e.keyCode === 9) {
+            if (e.keyCode === 9 && cursorPosition.top == 0) {
                 e.preventDefault();
                 const start = textarea?.selectionStart;
                 const end = textarea?.selectionEnd;
                 const value = textarea?.value;
 
-                // textarea.value = value?.substring(0, start) + "    " + value?.substring(end);
                 textarea.value = value?.substring(0, start) + "\t" + value?.substring(end);
                 textarea.selectionStart = textarea.selectionEnd = start + 1;
 
@@ -233,7 +280,7 @@ function Codespace() {
                                 ref={textareaRef}
                                 spellCheck={false}
                                 style={{ fontSize: zoom.fontSize + 'vw', lineHeight: zoom.lineHeight }}
-                                onBlur={() => setCursorPosition({ top: 0, left: 0 })}
+                                onBlur={() => setTimeout(() => setCursorPosition({ top: 0, left: 0 }), 100)}
                                 onClick={() => setCursorPosition({ top: 0, left: 0 })}
                             />
                         </div>
@@ -244,7 +291,7 @@ function Codespace() {
                         <h2>_</h2>
                     </div>
             }
-            <Hints cursorPosition={cursorPosition} currentLine={currentLineState} />
+            <Hints cursorPosition={cursorPosition} currentLine={currentLineState} handleSelectSuggestion={handleSelectSuggestion} />
         </div>
     )
 }

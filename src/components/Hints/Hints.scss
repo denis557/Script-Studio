@@ -2,16 +2,52 @@
 
 .hints {
     width: 220px;
+    max-width: 300px;
     height: fit-content;
     max-height: 250px;
-    border-radius: 2px;
+    border-radius: 3px;
     background-color: #2b2b2b;
     position: absolute;
     display: none;
     flex-direction: column;
     overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 9999;
 
-    p {
+    &::-webkit-scrollbar {
+        width: 3px;
+        background-color: #333333;
+        border-radius: 10px;
+        cursor: default;
+    }
+
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         width: 100%;
+        height: 22px;
+        padding-inline: 2px;
+        color: white;
+        font-size: 17px;
+
+        &:hover {
+            background-color: #3d3d3d;
+        }
+
+        &.active {
+            background-color: #3d3d3d;
+            border: 1px solid #292929
+        }
+
+        .warning {
+            font-size: 11px;
+            color: #4e4e4e;
+            margin-left: auto;
+            margin-bottom: 2px;
+            align-self: flex-end;
+            text-wrap: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 }

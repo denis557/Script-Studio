@@ -65,6 +65,7 @@
         pre {
             font-family: "Roboto", "Inter", sans-serif;
             font-size: 1.04vw;
+            font-weight: 500;
             line-height: 1.6;
             margin: 0;
             padding: 0;
@@ -77,6 +78,7 @@
             text-shadow: none;
             -webkit-text-stroke: 0;
             tab-size: 4;
+            letter-spacing: 0.3px;
 
             .keyword {
                 color: $keyword;
@@ -137,12 +139,13 @@
             caret-color: white;
             resize: none;
             font-size: 1.04vw;
-            font-weight: 400;
+            font-weight: 500;
             line-height: 1.6;
             z-index: 1;
             overflow-x: auto;
             white-space: pre;
             tab-size: 4;
+            letter-spacing: 0.3px;
 
             &::-webkit-scrollbar {
                 height: 7px;
